@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>학과 안내 사항</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      overflow: hidden;
+      background: #000;
+      color: #fff;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    #slideshow {
+      position: absolute;
+      inset: 0;
+      padding: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .slide {
+      position: absolute;
+      inset: 40px 40px 80px 40px; /* 아래쪽 티커 공간 확보 */
+      display: none;
+      flex-direction: row;
+      gap: 40px;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .slide.active { display: flex; }
+
+    .slide img {
+      max-width: 40vw;
+      max-height: 60vh;
+      object-fit: contain;
+    }
+
+    .slide-text {
+      max-width: 45vw;
+    }
+
+    .slide-title {
+      font-size: 2.2rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+
+    .slide-body {
+      font-size: 1.3rem;
+      line-height: 1.5;
+      white-space: pre-line;
+    }
+
+    #header {
+        text-align: center; /* 이미지 중앙 정렬 */
+        padding-top: 20px;
+        position: relative; 
+        z-index: 10;
+        height: 100px; /* 헤더 영역 높이 지정 */
+    }
+    #header img {
+        height: 140px; /* 로고 이미지 크기 설정 */
+        object-fit: contain;
+    }
+
+    /* 뉴스 티커 영역 */
+    #ticker-wrapper {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 60px;
+      background: rgba(0, 0, 0, 0.8);
+      overflow: hidden;
+      border-top: 2px solid #444;
+      display: flex;
+      align-items: center;
+    }
+
+    #ticker {
+      white-space: nowrap;
+      display: inline-block;
+      padding-left: 100%;
+      animation: scroll-left 40s linear infinite;
+      font-size: 1.1rem;
+    }
+
+    #ticker span {
+      margin-right: 100px;
+    }
+
+    @keyframes scroll-left {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-100%); }
+    
+    }
+  </style>
+</head>
+<body>
+ <div id="header">
+    <img src="images/logo.png" alt="영남이공대학교 소프트웨어융합과 로고">
+</div>
+  <div id="slideshow"></div>
+  <div id="ticker-wrapper">
+    <div id="ticker"></div>
+  </div>
+
+  <script>
+    // 1) 여기에 학과 뉴스 데이터를 넣는다.
+    const NEWS = [
+      {
+        title: "2025 디지텍 캡스톤 디자인 경진대회 '은상' 수상",
+        body: "영남이공대학교 소프트웨어융합과 N.A.P 동아리 ‘2025 디지텍 캡스톤디자인 경진대회’에서 은상을 수상했습니다. 전국 10개 전문대학, 38개 팀이 참가한 이번 대회에서 N.A.P 팀은 AI 기반 사용자 맞춤형 서비스 프로젝트를 선보여 높은 기술 완성도와 실용성을 인정받았습니다. 학생들은 AI 모델 학습, 센서·영상 데이터 처리, UX 설계, 기능 구현까지 전 과정을 직접 수행하며 실제 환경에서도 활용 가능한 지능형 시스템을 완성했습니다. 이번 성과는 학생들이 프로젝트 기반 교육과 산업 연계 실습을 통해 쌓아온 실전 개발 역량이 뛰어나다는 것을 입증한 결과입니다.",
+        image: "images/image1.png",
+        ticker: "2026학년도 국가장학금 신청 안내 신청기간 : 2025년 11월 20일(목) ~12월 26일(금) [문의처 : 한국장학재단]",
+        linkUrl: "https://www.kbsm.net/news/view.php?idx=498691",
+        linkText: "뉴스 바로가기"
+      },
+
+      {
+        title: "영남이공대 소프트웨어융합과 김성민씨, '2025 NI2.0 AID 해커톤 대회'서 최우수상 수상",
+        body: "영남이공대학교(총장 이재용) 소프트웨어융합과 김성민씨(28)가 최근 서울 강남구 AWS Korea 본사에서 열린 ‘2025 NI2.0 AID 해커톤’에서 최우수상을 수상했습니다. 이번 대회는\n 교육부와 한국연구재단이 주최하고, 신산업특화사업 2.0 발전협의회가 주관했으며, 전국 전문대학교 학생들이 생성형 AI를 활용한 문제 해결 솔루션을 겨뤘습니다. 김성민씨는 지역사회 문제 해결을 위한 AI 기반 스마트 서비스 프로토타입을 개발해 높은 평가를 받았습니다. 특히 AWS 최신 클라우드·AI 기술을 활용한 아이디어와 구현력이 심사위원의 호평을 받았습니다. 영남이공대 소프트웨어융합과는 AI, 빅데이터, 게임개발 등 실무형 인재 양성에 주력하며, 전국 팀 프로젝트 경진대회에서 연속 수상 경험이 있습니다.",
+        image: "images/image2.png",
+        ticker: "2025학년도 동계 계절학기가 운영될 예정입니다. 계절학기 수강을 희망하는 학생은 안내된 기간 내에 신청하시기 바랍니다. [문의처 : 학과사무실]",
+        linkUrl: "https://www.newsfreezone.co.kr/news/articleView.html?idxno=654361",
+        linkText: "뉴스 바로가기"
+      },
+      {
+        title: "2026학년도 전공심화과정 모집 안내 ",
+        body: "원서 접수 : 2025년 11월 24일 (월요일) ~ 2026년 1월 9일 (금요일) \n면접고사 : 2026년 1월 16일 (금요일)\n합격자 발표 : 2026년 1월 30일 (금요일)\n 장학 혜택 : 매 학기 등록금의 30% 감면",
+        linkUrl: "https://exam.ync.ac.kr/exam/CMS/Board/Board.do?mCode=MN032&mode=view&board_seq=102954&mgr_seq=1",
+        linkText: "자세히 보기",
+        image: "images/image3.png",
+        ticker: "2025학년도 전기 졸업예정자 기술상 수상자 추천을 받고 있습니다. 2025학년도 전기 졸업예정자 중 기술상 수상을 희망하는 학생은 기한 내 연락 바랍니다. [문의처 : 학과사무실]"
+      }
+      
+    ];
+
+    const SLIDE_DURATION = 7000; // 한 슬라이드당 7초
+
+    const slideshowEl = document.getElementById("slideshow");
+    const tickerEl = document.getElementById("ticker");
+// 2) 슬라이드 DOM 생성
+NEWS.forEach((item, index) => {
+   const slide = document.createElement("div");
+    slide.className = "slide";
+    if (index === 0) slide.classList.add("active");
+
+     if (item.image) {
+         const img = document.createElement("img");
+         img.src = item.image;
+         img.alt = item.title;
+         slide.appendChild(img);
+      }
+
+      const textBox = document.createElement("div");
+      textBox.className = "slide-text";
+
+      const title = document.createElement("div");
+      title.className = "slide-title";
+      title.textContent = item.title;
+
+      const body = document.createElement("div");
+      body.className = "slide-body";
+      body.textContent = item.body;
+
+      textBox.appendChild(title);
+      textBox.appendChild(body);
+
+       if (item.linkUrl && item.linkText) {
+          const linkWrapper = document.createElement("div");
+           linkWrapper.className = "slide-link"; // 스타일 적용을 위해 클래스 추가
+
+           const link = document.createElement("a");
+           link.href = item.linkUrl;
+          link.textContent = item.linkText;
+          link.target = "_blank"; // 새 창/탭에서 열리도록 설정 (선택 사항)
+
+          linkWrapper.appendChild(link);
+          textBox.appendChild(linkWrapper);
+      }
+
+      slide.appendChild(textBox);
+
+      slideshowEl.appendChild(slide);
+     });
+
+    // 3) 티커 텍스트 구성
+    tickerEl.innerHTML = "";
+    NEWS.forEach(item => {
+      const span = document.createElement("span");
+      span.textContent = item.ticker || item.title;
+      tickerEl.appendChild(span);
+    });
+
+    // 4) 슬라이드 자동 전환
+    let currentIndex = 0;
+    const slides = document.querySelectorAll(".slide");
+
+    setInterval(() => {
+      slides[currentIndex].classList.remove("active");
+      currentIndex = (currentIndex + 1) % slides.length;
+      slides[currentIndex].classList.add("active");
+    }, SLIDE_DURATION);
+  </script>
+</body>
+</html>
